@@ -7,9 +7,16 @@ exports.auth = (req, res, next) => {
   try {
     //extract  token
     // Three way to pass token (body,cookie,header)
-    const token = req.body.token;
 
-    if (!token) {
+    console.log("cookies", req.cookies.token);
+    console.log("body", req.body?.token);
+    console.log("header", req.headers.authorization);
+    const token =
+      req.cookies.token ||
+      req.body?.token ||
+      req.header("Authorization").replace("Bearer ", "");
+
+    if (!token || token == undefined) {
       return res.json({
         success: false,
         message: "Token Missing ",
@@ -18,11 +25,13 @@ exports.auth = (req, res, next) => {
 
     //varify this token
     try {
+      // console.log(process.env.JWT_SECRET);
       const decode = jwt.verify(token, process.env.JWT_SECRET);
       console.log(decode);
 
       req.user = decode;
     } catch (error) {
+      console.log(error);
       return res.json({
         success: false,
         message: "token is invalid",

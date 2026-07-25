@@ -85,6 +85,7 @@ exports.login = async (req, res) => {
       let token = jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: "2h",
       });
+      // console.log(process.env.JWT_SECRET);
 
       user = user.toObject();
       user.token = token;
@@ -95,12 +96,19 @@ exports.login = async (req, res) => {
         httpOnly: true,
       };
 
-      res.cookie("token", token, options).status(200).json({
-        success: true,
-        token,
-        user,
-        message: "User loggedIn successfully ",
-      });
+      // res.cookie("token", token, options).status(200).json({
+      //   success: true,
+      //   token,
+      //   user,
+      //   message: "User loggedIn successfully ",
+      // });
+
+      // res.status(200).json({
+      //   success: true,
+      //   token,
+      //   user,
+      //   message: "User loggedIn successfully ",
+      // });
     } else {
       return res.status(403).json({
         success: false,
